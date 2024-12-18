@@ -1,0 +1,70 @@
+.picker {}
+
+.picker__top-part {
+    display: flex;
+    justify-content: space-between;
+    font-size: 3rem;
+}
+
+.picker__currency-input {
+    max-width: 38rem;
+    text-align: left;
+}
+
+.picker__currency-input::-webkit-outer-spin-button,
+.picker__currency-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.picker__currency-input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.picker__currency-input::placeholder {
+    opacity: 0.3;
+}
+
+.picker__currency-name {
+    color: #0093d5;
+}
+
+.picker__middle-divider {
+    height: 1px;
+    background: #c5c5c5;
+    margin: .2rem 0 1.2rem 0;
+}
+
+.picker__bottom-part {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+}
+
+.picker__bottom-btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: gray;
+    text-align: center;
+    cursor: pointer;
+    overflow: hidden;
+    padding: 0.6rem 1rem;
+    border: 1px solid #c5c5c5;
+    border-radius: 2rem;
+}
+.picker__bottom-btn-line {
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: #0093d5;
+}
+.picker__bottom-btn-text {
+    position: relative;
+    z-index: 2;
+}

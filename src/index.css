@@ -1,0 +1,29 @@
+:root {
+  font-family: Arial, Helvetica, sans-serif;
+  /*Стандартный размер шрифта в браузере 16 пикселей.*/
+  /*Поэтому 10 пикселей будет 62.5%.*/
+  font-size: 62.5%;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+*:not(svg, g, path) {
+  all: unset;
+  display: revert;
+  list-style: none;
+}
+
+html, body {
+  scrollbar-gutter: auto;
+}
+
+body {
+  padding: 3rem;
+}
+
+#app {
+
+}

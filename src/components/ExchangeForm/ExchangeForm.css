@@ -1,0 +1,11 @@
+.exchange-form {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+@media (min-width: 55rem) {
+    .exchange-form {
+        flex-direction: row;
+    }
+}
