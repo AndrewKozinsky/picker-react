@@ -1,4 +1,5 @@
 import axios from 'axios'
+import {z} from 'zod'
 
 export type GetExchangeDataFromServer = {
 	pairId: number
@@ -6,13 +7,15 @@ export type GetExchangeDataFromServer = {
 	outAmount?: number
 }
 
-export type GetExchangeDataServerRes = {
-	counter: number // 0
-	inAmount: string //"10000"
-	isStraight: boolean // true
-	outAmount: string // "96.36"
-	price: [number, number] // ['0.009636696540426', '103.77']
-}
+const schemaGetExchangeDataServerRes = z.object({
+	counter: z.number(), // 0
+	inAmount: z.string(), //"10000"
+	isStraight: z.boolean(), // true
+	outAmount: z.string(), // "96.36"
+	price: z.array(z.string()).length(2) // ['0.009636696540426', '103.77']
+})
+
+export type GetExchangeDataServerRes = z.infer<typeof schemaGetExchangeDataServerRes>
 
 export async function getExchangeData(
 	config: GetExchangeDataFromServer
@@ -27,11 +30,17 @@ export async function getExchangeData(
 		outAmount
 	}
 
-	const data = await axios.post<GetExchangeDataServerRes>('/b2api/change/user/pair/calc', body, {
-		headers: {
-			serial: 'a7307e89-fbeb-4b28-a8ce-55b7fb3c32aa'
-		},
-	})
+	try {
+		const axiosResponse = await axios.post<undefined | GetExchangeDataServerRes>('/b2api/change/user/pair/calc', body, {
+			headers: {
+				serial: 'a7307e89-fbeb-4b28-a8ce-55b7fb3c32aa'
+			},
+		})
 
-	return data.data
+		return schemaGetExchangeDataServerRes.parse(axiosResponse.data)
+	} catch (error) {
+		console.error(error)
+		return undefined
+	}
+
 }

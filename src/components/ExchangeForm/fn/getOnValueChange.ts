@@ -1,6 +1,6 @@
 import {useCallback} from 'react'
-import {PickerStore, useExchangeFormStore} from '../store/store.ts'
-import {getExchangeData, GetExchangeDataFromServer} from './getData.ts'
+import { PickerStore, useExchangeFormStore } from '../store/store.ts'
+import { getExchangeData, GetExchangeDataFromServer } from './getData.ts'
 
 /**
  * Возвращает функцию, которая передаётся в Сборщик.
@@ -14,9 +14,6 @@ export function useGetOnPickerValChangeHandler(inputName: 'inPicker' | 'outPicke
 	const changeOutValue = useExchangeFormStore(store => store.changeOutValue)
 
 	return useCallback(function (newValue: number, isValuePrepared: boolean) {
-		// console.log(inputName)
-		// console.log(newValue)
-		// console.log(isValuePrepared)
 		if (inputName === 'inPicker') {
 			changeInValue(newValue, isValuePrepared)
 
@@ -45,8 +42,14 @@ export function useGetOnPickerValChangeHandler(inputName: 'inPicker' | 'outPicke
  * @param reqBody — данные для запроса
  */
 async function updateOnePickerDataDependsOnOtherOne(reqBody: GetExchangeDataFromServer) {
-	const servRespData = await getExchangeData(reqBody)
 	const store = useExchangeFormStore.getState()
+
+	const servRespData = await getExchangeData(reqBody)
+	// Если пришёл undefined, то или сервер ответил ошибкой или формат данных не соответствует ожидаемому
+	if (servRespData === undefined) {
+		useExchangeFormStore.setState({dataStatus: 'error'})
+		return
+	}
 
 	// Если в запросе передали значение левого поля ввода (inPicker) для получения курса правого (outPicker).
 	if (servRespData.isStraight) {

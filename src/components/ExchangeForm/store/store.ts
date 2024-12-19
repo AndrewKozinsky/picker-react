@@ -1,12 +1,15 @@
 import { create } from 'zustand'
-import {OnValueChange} from '../../Picker/Picker.tsx'
 
 type ExchangeFormStore = {
+	// Статус получения данных с сервера
+	dataStatus: 'pending' | 'success' | 'error'
 	currencyPairId: number
 	inPicker: PickerStore
 	outPicker: PickerStore
 	changeInValue: (value: number, isValuePrepared: boolean) => void
 	changeOutValue: (value: number, isValuePrepared: boolean) => void
+	changeInMinMaxValue: (minValue: number, maxValue: number) => void
+	changeOutMinMaxValue: (minValue: number, maxValue: number) => void
 }
 
 // Тип данных Сборщика
@@ -27,6 +30,7 @@ export type PickerStore = {
 
 export const useExchangeFormStore = create<ExchangeFormStore>((set) => {
 	return {
+		dataStatus: 'pending',
 		currencyPairId: 133,
 		inPicker: {
 			currency: 'RUR',
@@ -48,6 +52,7 @@ export const useExchangeFormStore = create<ExchangeFormStore>((set) => {
 		},
 		changeInValue: (newValue: number, isValuePrepared: boolean) => {
 			set((state: ExchangeFormStore) => {
+				console.log(newValue)
 				return getNewPickerData(state, 'in', newValue, isValuePrepared)
 			})
 		},
@@ -55,7 +60,17 @@ export const useExchangeFormStore = create<ExchangeFormStore>((set) => {
 			set((state: ExchangeFormStore) => {
 				return getNewPickerData(state, 'out', newValue, isValuePrepared)
 			})
-		}
+		},
+		changeInMinMaxValue: (minValue: number, maxValue: number) => {
+			set((state: ExchangeFormStore) => {
+				return changeMinOrMaxPickerValue(state, 'inPicker', minValue, maxValue)
+			})
+		},
+		changeOutMinMaxValue: (minValue: number, maxValue: number) => {
+			set((state: ExchangeFormStore) => {
+				return changeMinOrMaxPickerValue(state, 'outPicker', minValue, maxValue)
+			})
+		},
 	}
 })
 
@@ -78,4 +93,15 @@ function getNewPickerData(
 	return pickerName === 'in'
 		? { inPicker: pickerObjCopy }
 		: { outPicker: pickerObjCopy }
+}
+
+function changeMinOrMaxPickerValue(
+	state: ExchangeFormStore, pickerName: 'inPicker' | 'outPicker', minValue: number, maxValue: number
+): Partial<ExchangeFormStore> {
+	let pickerObjCopy = {...state[pickerName]}
+
+	pickerObjCopy.minValue = minValue
+	pickerObjCopy.maxValue = maxValue
+
+	return { [pickerName]: pickerObjCopy }
 }

@@ -39,14 +39,16 @@ export class ValueManager {
 		return this.normalizeValue(newValue)
 	}
 
-	normalizeValue(unsafeValue: Decimal): Decimal {
-		if (unsafeValue.lt(this.minValue)) {
+	normalizeValue(unsafeValue: number | Decimal): Decimal {
+		const decUnsafeValue = new Decimal(unsafeValue)
+
+		if (decUnsafeValue.lt(this.minValue)) {
 			return this.minValue
-		} else if (unsafeValue.gt(this.maxValue)) {
+		} else if (decUnsafeValue.gt(this.maxValue)) {
 			return this.maxValue
 		}
 
-		return ValueManager.roundNumberToStep(unsafeValue, this.step)
+		return ValueManager.roundNumberToStep(decUnsafeValue, this.step)
 	}
 
 	/**

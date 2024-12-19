@@ -20,8 +20,6 @@ export function useAnimateProgressLine(
 
 		const prevPercents = +valueManager.getPercentFromValue(prevValue).toString()
 		const newPercents = +valueManager.getPercentFromValue(value).toString()
-		// console.log({prevPercents})
-		// console.log({newPercents})
 
 		animateProgressLine({
 			$segmentsArr: $segments as HTMLDivElement[],

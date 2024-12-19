@@ -9,9 +9,11 @@ import {
 import {useGetSetPercentageValue} from './fn/getSetPercentageValue.ts'
 import {useSetInitialProgressWidth} from './fn/setInitialProgressWidth.ts'
 import {BottomButtonText} from './fn/types.ts'
+import {useFixMinMaxAndCurrentValueAfterStart} from './fn/updateMinOrMaxValue.ts'
 import './Picker.css'
 
 export type OnValueChange = (newValue: number, isValuePrepared: boolean) => void
+export type OnMinMaxValueChange = (newMinValue: number, newMaxValue: number) => void
 
 type PickerProps = {
 	currency: string
@@ -22,14 +24,17 @@ type PickerProps = {
 	isValuePrepared: boolean
 	prevPreparedValue: number
 	onValueChange: OnValueChange
+	onMinMaxValueChange: OnMinMaxValueChange
 }
 
 function Picker(props: PickerProps) {
-	const { currency, min, max, step, value, isValuePrepared, prevPreparedValue, onValueChange } = props
+	const { currency, min, max, step, value, isValuePrepared, prevPreparedValue, onValueChange, onMinMaxValueChange } = props
 
 	const valueManager = useCreateValueManagerInstance(
 		{minValue: min, maxValue: max, valueStep: step, value}
 	)
+
+	useFixMinMaxAndCurrentValueAfterStart(valueManager, onMinMaxValueChange)
 
 	const fieldOnKeyDown = useGetFieldOnKeyDownHandler(value, valueManager, onValueChange)
 	const fieldOnInput = useGetFieldOnInputHandler(onValueChange)
@@ -51,13 +56,13 @@ function Picker(props: PickerProps) {
 		value,
 	)
 
-	useAnimateProgressLine(
+	/*useAnimateProgressLine(
 		valueManager,
 		[firstSegmentRef.current, secondSegmentRef.current, thirdSegmentRef.current, forthSegmentRef.current],
 		value,
 		isValuePrepared,
 		prevPreparedValue
-	)
+	)*/
 
 	return (
 		<section className="picker">

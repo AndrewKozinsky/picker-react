@@ -16,6 +16,12 @@ export function usePrepareStore() {
 		const reqBody: GetExchangeDataFromServer = {pairId, inAmount: inPickerData.value}
 
 		getExchangeData(reqBody).then((servRespData) => {
+			// Если пришёл undefined, то или сервер ответил ошибкой или формат данных не соответствует ожидаемому
+			if (servRespData === undefined) {
+				useExchangeFormStore.setState({dataStatus: 'error'})
+				return
+			}
+
 			// Высчитывание минимального и максимального значения для второго сборщика
 			const decOutPickerMinValue = new Decimal(inPickerData.minValue).mul(servRespData.price[0])
 			const decOutPickerMaxValue = new Decimal(inPickerData.maxValue).mul(servRespData.price[0])
@@ -28,8 +34,10 @@ export function usePrepareStore() {
 				isValuePrepared: true
 			}
 
-			useExchangeFormStore.setState({outPicker: updatedOutPickerData})
+			useExchangeFormStore.setState({
+				dataStatus: 'success',
+				outPicker: updatedOutPickerData
+			})
 		})
 	}, [])
 }
-

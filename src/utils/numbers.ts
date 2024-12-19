@@ -1,10 +1,6 @@
 import Decimal from 'decimal.js-light'
 
-export function convertDecimalToNumber(decimalNum: undefined | null | Decimal): null | number {
-	if (!decimalNum) {
-		return null
-	}
-
+export function convertDecimalToNumber(decimalNum: Decimal): number {
 	return +decimalNum.toString()
 }
 

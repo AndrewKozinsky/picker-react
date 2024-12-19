@@ -1,6 +1,5 @@
 import React from 'react'
 import Decimal from 'decimal.js-light'
-import {createLogger} from 'vite'
 import {unknownToPositiveNumber} from '../../../utils/numbers.ts'
 import {OnValueChange} from '../Picker.tsx'
 import {ValueManager} from './valueManager.ts'
@@ -40,7 +39,7 @@ export function useGetFieldOnKeyDownHandler(
 			const newDecValue = newDecValues[e.key as ArrowKeyNames]
 			target.value = newDecValue.toString()
 
-			onValueChange(+newDecValue.toString(), false)
+			onValueChange(+newDecValue.toString(), true)
 			return
 		}
 	}
